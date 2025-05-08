@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Weather Results</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather in {{ weather.city }}</h1>
+        <div class="results-container">
+            <div class="weather-info">
+                <h2 class="city-name">{{ weather.city }}</h2>
+                <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="{{ weather.description }}" class="weather-icon" />
+                <div class="weather-data">
+                    <div class="weather-stat">
+                        <span class="stat-label">Temperature</span>
+                        <span class="stat-value">{{ weather.temperature }} °C</span>
+                    </div>
+                    <div class="weather-stat">
+                        <span class="stat-label">Feels Like</span>
+                        <span class="stat-value">{{ weather.feels_like }} °C</span>
+                    </div>
+                    <div class="weather-stat">
+                        <span class="stat-label">Condition</span>
+                        <span class="stat-value">{{ weather.description }}</span>
+                    </div>
+                    <div class="weather-stat">
+                        <span class="stat-label">Wind Speed</span>
+                        <span class="stat-value">{{ weather.wind_speed }} m/s</span>
+                    </div>
+                    <div class="weather-stat">
+                        <span class="stat-label">Humidity</span>
+                        <span class="stat-value">{{ weather.humidity }}%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+        <a href="/" class="back-link">Search again</a>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        const map = L.map('map').setView([{{ weather.lat }}, {{ weather.lon }}], 10);
+    
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        L.marker([{{ weather.lat }}, {{ weather.lon }}])
+            .addTo(map)
+            .bindPopup('<b>{{ weather.city }}</b>')
+            .openPopup();
+    </script>
+</body>
+</html>
